@@ -20,11 +20,11 @@ const Board = () => {
 
 
   const onDragEnd = (result) => {
-    console.log("Result",result);
+    console.log("Result",result); //
   const {destination,source,draggableId} = result;
 
- if(!destination)console.log("No Destination");
- else if(destination.droppableId === source.droppableId && destination.index === source.index)console.log("Same");
+ if(!destination)console.log("No Destination"); //
+ else if(destination.droppableId === source.droppableId && destination.index === source.index)console.log("Same");//
 
 let start = columns.filter(column=>column.id===source.droppableId)[0];
 let finish = columns.filter(column=>column.id===destination.droppableId)[0];
@@ -34,14 +34,14 @@ let newTaskIds = Array.from(start.taskIds);
   newTaskIds.splice(source.index,1);
   newTaskIds.splice(destination.index,0,draggableId);
 
-let index = columns.indexOf(start);
-let newColumns = [...columns];
-newColumns[index] = {
-  ...newColumns[index],
-  taskIds: newTaskIds,
-};
-console.log("New",newColumns);
-setColumns(newColumns);
+// let index = columns.indexOf(start);
+// let newColumns = [...columns];
+// newColumns[index] = {
+//   ...newColumns[index],
+//   taskIds: newTaskIds,
+// };
+// console.log("New",newColumns); //
+// setColumns(newColumns);
 }
  
  

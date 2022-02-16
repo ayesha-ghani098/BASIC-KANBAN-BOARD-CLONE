@@ -16,7 +16,7 @@ const AddColumnForm = (props) => {
     let obj = {
       id: Id,
       columnTitle: title,
-      taskIds: []
+      taskIds: [],
     };
     AddColumn(obj);
     props.onHide();
