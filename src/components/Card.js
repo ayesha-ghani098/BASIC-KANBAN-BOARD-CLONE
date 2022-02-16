@@ -23,7 +23,7 @@ const Card = (props) => {
 
   return (
     <div>
-      <Draggable draggableId={id} index={index}>
+      <Draggable key={id} draggableId={id} index={index}>
         {(provided,snapshot) => (
           <div
             className="task-card"

@@ -30,14 +30,18 @@ let start = columns.filter(column=>column.id===source.droppableId)[0];
 let finish = columns.filter(column=>column.id===destination.droppableId)[0];
 
 if (start === finish){
-  const newTaskIds = Array.from(start.taskIds);
+let newTaskIds = Array.from(start.taskIds);
   newTaskIds.splice(source.index,1);
   newTaskIds.splice(destination.index,0,draggableId);
 
-//   let index = columns.findIndex((column) => column.id === start.id);
-// let Columns = [...columns];
-// Columns[index] = {...Columns[index],taskIds: newTaskIds};
-// setColumns(Columns);
+let index = columns.indexOf(start);
+let newColumns = [...columns];
+newColumns[index] = {
+  ...newColumns[index],
+  taskIds: newTaskIds,
+};
+console.log("New",newColumns);
+setColumns(newColumns);
 }
  
  

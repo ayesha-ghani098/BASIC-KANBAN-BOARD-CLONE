@@ -13,7 +13,6 @@ const TaskContextProvider = (props) => {
 
   // Add Task
   const AddTask = (Obj, ColumnId) => {
-    console.log("Clear",Obj,ColumnId)
     setTasks([...tasks,Obj]);
     let index = columns.findIndex((column) => column.id === ColumnId);
     columns[index].taskIds.push(Obj.id);

@@ -13,14 +13,12 @@ import AddTaskForm from "./Forms/AddTaskForm";
 import { ColumnActionContext } from "../context/ColumnContext";
 import { TaskContext } from "../context/TaskContext";
 
-
 const Column = (props) => {
   const { id, columnTitle, taskIds } = props.column;
   const [cform, setCForm] = useState(false);
   const [aform, setAForm] = useState(false);
-  const {tasks} = useContext(TaskContext);
+  const { tasks } = useContext(TaskContext);
   const { DeleteColumn } = useContext(ColumnActionContext);
-
 
   const handleDelete = () => {
     DeleteColumn(id);
@@ -54,24 +52,31 @@ const Column = (props) => {
         <Button label="Add Task" onClick={() => setAForm(true)} />
       </div>
 
-      <Droppable droppableId={id} >
-        {(provided,snapshot) => (
+      <Droppable droppableId={id}>
+        {(provided, snapshot) => (
           <div
             className="task-container"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-        { taskIds?
-          taskIds.map((taskId)=>(
-           tasks.map((task,index)=>(
-task.id === taskId? <Card key={task.id} columnid={id} task={task} index={index}/>:<></>
-           ))
-
-      
-        
-          ))
-          :<></>
-        }
+            {taskIds ? (
+              taskIds.map((taskId) =>
+                tasks.map((task, index) =>
+                  task.id === taskId ? (
+                    <Card
+                      key={task.id}
+                      columnid={id}
+                      task={task}
+                      index={index}
+                    />
+                  ) : (
+                    <></>
+                  )
+                )
+              )
+            ) : (
+              <></>
+            )}
             {provided.placeholder}
           </div>
         )}
