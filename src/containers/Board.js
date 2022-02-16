@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useContext } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import _ from "lodash";
 
 // Custom Components
 import Button from "../components/Button";
@@ -13,42 +14,83 @@ import { TaskActionContext, TaskContext } from "../context/TaskContext";
 const Board = () => {
   const [form, setForm] = useState(false);
   const { columns } = useContext(ColumnContext);
-  const  { setColumns} = useContext(ColumnActionContext);
-  const{tasks} = useContext(TaskContext)
-  const{setTasks} = useContext(TaskActionContext)
-
-
+  const { setColumns } = useContext(ColumnActionContext);
+  const { tasks } = useContext(TaskContext);
+  const { setTasks } = useContext(TaskActionContext);
 
   const onDragEnd = (result) => {
-    console.log("Result",result); //
-  const {destination,source,draggableId} = result;
+    const { destination, source, draggableId: item } = result;
 
- if(!destination)console.log("No Destination"); //
- else if(destination.droppableId === source.droppableId && destination.index === source.index)console.log("Same");//
+    let movedItem = item.split("$")[1];
 
-let start = columns.filter(column=>column.id===source.droppableId)[0];
-let finish = columns.filter(column=>column.id===destination.droppableId)[0];
+    if (!destination) {
+      return;
+    }
 
-if (start === finish){
-let newTaskIds = Array.from(start.taskIds);
-  newTaskIds.splice(source.index,1);
-  newTaskIds.splice(destination.index,0,draggableId);
+    const sourceId = source.droppableId;
+    const destinationId = destination.droppableId;
+    const destinationIndex = destination.index;
 
-// let index = columns.indexOf(start);
-// let newColumns = [...columns];
-// newColumns[index] = {
-//   ...newColumns[index],
-//   taskIds: newTaskIds,
-// };
-// console.log("New",newColumns); //
-// setColumns(newColumns);
-}
- 
- 
+    if (sourceId == destinationId) {
+      handleSameColumn(result);
+      return;
+    }
 
+    let tempData = [...columns];
+    const destinationArray = tempData.find((item) => item.id === destinationId);
+    const sourceArray = tempData.find((item) => item.id === sourceId);
 
+    const destinationTasks = _.cloneDeep(destinationArray.taskIds);
 
-}
+    destinationTasks.splice(destinationIndex, 0, movedItem);
+    destinationArray.taskIds = destinationTasks;
+
+    const sourceTasks = sourceArray.taskIds.filter((item) => item != movedItem);
+    sourceArray.taskIds = sourceTasks;
+
+    const finalData = columns.map((item) => {
+      if (item.id === destinationArray.id) {
+        return destinationArray;
+      } else if (item.id === sourceArray.id) {
+        return sourceArray;
+      }
+      return item;
+    });
+
+    setColumns(finalData);
+  };
+
+  const handleSameColumn = (result) => {
+    const { destination, source, draggableId: item } = result;
+
+    let tempData = [...columns];
+
+    let movedItem = item.split("$")[1];
+
+    const sourceId = source.droppableId;
+    const destinationIndex = destination.index;
+    const sourceIndex = source.index;
+
+    if (destinationIndex === sourceIndex) {
+      return;
+    }
+
+    const sourceArray = tempData.find((item) => item.id === sourceId);
+    let clonedTasks = _.cloneDeep(sourceArray.taskIds);
+    const sourceTasks = clonedTasks.filter((item) => item != movedItem);
+
+    sourceTasks.splice(destinationIndex, 0, movedItem);
+    sourceArray.taskIds = sourceTasks;
+
+    const finalData = columns.map((item) => {
+      if (item.id === sourceArray.id) {
+        return sourceArray;
+      }
+      return item;
+    });
+
+    setColumns(finalData);
+  };
 
   return (
     <Fragment>
@@ -59,13 +101,9 @@ let newTaskIds = Array.from(start.taskIds);
       <div className="container">
         <div className="row">
           <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
-            {columns ? (
-              columns.map((data, index) => {
-                return <Column column={data} key={index} prefix={index} />;
-              })
-            ) : (
-              <></>
-            )}
+            {columns.map((data, index) => {
+              return <Column column={data} key={index} />;
+            })}
           </DragDropContext>
         </div>
         <div></div>

@@ -5,12 +5,12 @@ import { Modal } from "react-bootstrap";
 import { ColumnActionContext } from "../../context/ColumnContext";
 
 const EditColumnForm = (props) => {
-  const { id, columnTitle, tasks } = props.column;
+  const { id, columnTitle, taskIds } = props.column;
   const [editedTitle, setEditedTitle] = useState("");
   const { EditColumn } = useContext(ColumnActionContext);
 
   const handleSubmit = () => {
-    EditColumn(id, editedTitle, tasks);
+    EditColumn(id, editedTitle, taskIds);
     setEditedTitle("");
     props.onHide();
   };

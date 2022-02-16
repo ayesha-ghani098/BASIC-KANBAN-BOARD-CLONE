@@ -11,13 +11,12 @@ import AddTaskForm from "./Forms/AddTaskForm";
 
 // Context
 import { ColumnActionContext } from "../context/ColumnContext";
-import { TaskContext } from "../context/TaskContext";
 
 const Column = (props) => {
   const { id, columnTitle, taskIds } = props.column;
   const [cform, setCForm] = useState(false);
   const [aform, setAForm] = useState(false);
-  const { tasks } = useContext(TaskContext);
+
   const { DeleteColumn } = useContext(ColumnActionContext);
 
   const handleDelete = () => {
@@ -60,23 +59,15 @@ const Column = (props) => {
             {...provided.droppableProps}
           >
             {taskIds ? (
-              taskIds.map((taskId) =>
-                tasks.map((task, index) =>
-                  task.id === taskId ? (
-                    <Card
-                      key={task.id}
-                      columnid={id}
-                      task={task}
-                      index={index}
-                    />
-                  ) : (
-                    <></>
-                  )
-                )
-              )
+              taskIds.map((item, index) => {
+                return (
+                  <Card key={index} columnid={id} task={item} index={index} />
+                );
+              })
             ) : (
               <></>
             )}
+
             {provided.placeholder}
           </div>
         )}

@@ -13,7 +13,7 @@ const ColumnContextProvider = (props) => {
     setColumns([...columns, Obj]);
   };
 
-    // Edit Column Function
+  // Edit Column Function
   const EditColumn = (id, columnTitle, taskIds) => {
     let index = columns.findIndex((column) => column.id === id);
     let newColumns = [...columns];
